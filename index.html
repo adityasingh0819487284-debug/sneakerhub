@@ -1,0 +1,529 @@
+I'll create a complete e-commerce website for sneakers from Adidas, Puma, Campus, Comet, and Nike. Here's the full code:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SneakerHub - Premium Sneakers Collection</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .cart-icon {
+            position: relative;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23667eea" width="1200" height="600"/><path fill="%23ff6b6b" d="M0 300 Q300 0 600 300 T1200 300 V600 H0 Z"/></svg>');
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            margin-top: 80px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255,107,107,0.4);
+        }
+
+        /* Brands Filter */
+        .brands-filter {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .brands-filter h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .brand-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .brand-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .brand-btn.active,
+        .brand-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        /* Products Grid */
+        .products {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .product-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .product-image {
+            height: 250px;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .brand-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #ff6b6b;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            color: #ff6b6b;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart:hover {
+            transform: scale(1.05);
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+        }
+
+        .cart-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border-radius: 20px;
+        }
+
+        .cart-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cart-items {
+            padding: 1rem;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .cart-item-info h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-total {
+            padding: 1.5rem;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .brand-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">SneakerHub</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#products">Shop</a></li>
+                <li><a href="#brands">Brands</a></li>
+            </ul>
+            <div class="cart-icon" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Premium Sneakers Collection</h1>
+            <p>Discover the latest from Adidas, Puma, Nike, Campus & Comet</p>
+            <a href="#products" class="cta-button">Shop Now</a>
+        </div>
+    </section>
+
+    <!-- Brands Filter -->
+    <section class="brands-filter">
+        <h2>Choose Your Brand</h2>
+        <div class="brand-buttons">
+            <button class="brand-btn active" data-brand="all">All Brands</button>
+            <button class="brand-btn" data-brand="adidas">Adidas</button>
+            <button class="brand-btn" data-brand="puma">Puma</button>
+            <button class="brand-btn" data-brand="nike">Nike</button>
+            <button class="brand-btn" data-brand="campus">Campus</button>
+            <button class="brand-btn" data-brand="comet">Comet</button>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section class="products" id="products">
+        <!-- Products will be populated by JavaScript -->
+    </section>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>Shopping Cart</h3>
+                <button class="close-cart" onclick="toggleCart()">&times;</button>
+            </div>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-total">
+                <h3>Total: $<span id="cartTotal">0</span></h3>
+                <button class="checkout-btn" onclick="checkout()">Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Product data
+        const products = [
+            { id: 1, name: "Adidas Ultraboost 23", price: 189, brand: "adidas", image: "https://via.placeholder.com/300x250/ff6b6b/ffffff?text=Adidas+Ultraboost" },
+            { id: 2, name: "Puma RS-X3", price: 159, brand: "puma", image: "https://via.placeholder.com/300x250/667eea/ffffff?text=Puma+RS-X3" },
+            { id: 3, name: "Nike Air Max 270", price: 169, brand: "nike", image: "https://via.placeholder.com/300x250/00b894/ffffff?text=Nike+Air+Max" },
+            { id: 4, name: "Campus Alpha", price: 89, brand: "campus", image: "https://via.placeholder.com/300x250/e17055/ffffff?text=Campus+Alpha" },
+            { id: 5, name: "Comet Street Pro", price: 79, brand: "comet", image: "https://via.placeholder.com/300x250/f39c12/ffffff?text=Comet+Street" },
+            { id: 6, name: "Adidas NMD R1", price: 179, brand: "adidas", image: "https://via.placeholder.com/300x250/ff6b6b/ffffff?text=Adidas+NMD" },
+            { id: 7, name: "Puma Future Rider", price: 139, brand: "puma", image: "https://via.placeholder.com/300x250/667eea/ffffff?text=Puma+Future" },
+            { id: 8, name: "Nike React Element", price: 149, brand: "nike", image: "https://via.placeholder.com/300x250/00b894/ffffff?text=Nike+React" },
+            { id: 9, name: "Campus Retro", price: 99, brand: "campus", image: "https://via.placeholder.com/300x250/e17055/ffffff?text=Campus+Retro" },
+            { id: 10, name: "Comet Speed", price: 69, brand: "comet", image: "https://via.placeholder.com/300x250/f39c12/ffffff?text=Comet+Speed" },
+            { id: 11, name: "Adidas Stan Smith", price: 129, brand: "adidas", image: "https://via.placeholder.com/300x250/ff6b6b/ffffff?text=Adidas+Stan" },
+            { id: 12, name: "Nike Dunk Low", price: 129, brand: "nike", image: "https://via.placeholder.com/300x250/00b894/ffffff?text=Nike+Dunk" }
+        ];
+
+        let cart = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProducts(products);
+            animateProducts();
+        });
+
+        // Render products
+        function renderProducts(productList) {
+            const productsContainer = document.querySelector('.products');
+            productsContainer.innerHTML = productList.map(product => `
+                <div class="product-card" data-brand="${product.brand}">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}" loading="lazy">
+                        <div class="brand-badge">${product.brand.toUpperCase()}</div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">${product.name}</h3>
+                        <div class="product-price">$${product.price}</div>
+                        <button class="add-to-cart" onclick="addToCart(${product.id})">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter products by brand
+        document.querySelectorAll('.brand-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.brand-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const brand = this.dataset.brand;
+                const filteredProducts = brand === 'all' ? products : products.filter(p => p.brand === brand);
+                renderProducts(filteredProducts);
+                animateProducts();
+            });
+        });
+
+        // Add to cart
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const cartItem = cart.find(item => item.id === productId);
+            
+            if (cartItem) {
+                cartItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            
+            updateCartUI();
+        }
+
+        // Update cart UI
+        function updateCartUI() {
+            document.getElementById('cartCount').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+        }
+
+        // Toggle cart modal
+        function toggleCart() {
+            const modal = document.getElementById('cartModal');
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+            
+            if (modal.style.display === 'block') {
+                renderCart();
+            }
+        }
+
+        // Render cart
+        function renderCart() {
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p style="text-align: center; padding: 2rem; color: #666;">Your cart is empty</p>';
+                cartTotal.textContent = '0';
+                return;
+            }
+            
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        <p>$${item.price} x ${item.quantity}</p>
+                        <small>${item.quantity * item.price}</small>
+                    </div>
+                </div>
+            `).join('');
+            
+            const total = cart.reduce((sum,
